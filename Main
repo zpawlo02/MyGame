@@ -1,0 +1,73 @@
+//MAIN
+
+#include <SFML\Graphics.hpp>
+#include "TPlayer.h"
+#include "TGame.h"
+#include "Collision.h"
+#include "Menu.h"
+#include "TBlocks.h"
+
+#define WIDTH 900
+#define HEIGTH 950
+
+
+
+int main()
+{
+	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGTH),"MENU");
+	Menu menu(WIDTH, HEIGTH);
+	
+	while (window.isOpen())
+	{
+		sf::Event event;
+
+		while (window.pollEvent(event))
+		{
+			switch (event.type)
+			{
+			case sf::Event::KeyReleased:
+				switch (event.key.code)
+				{
+				case sf::Keyboard::W:
+					menu.MoveUp();
+					break;
+				case sf::Keyboard::S:
+					menu.MoveDown();
+					break;
+				case sf::Keyboard::Return:
+					switch (menu.GetPressedItem())
+					{
+					case 0:
+						{
+						window.close();
+						TPlayer player(WIDTH / 2, HEIGTH / 2.5);
+						TBlocks block(WIDTH / 2, HEIGTH / 30);
+						TGame game(&player, &block);
+						sf::Clock clock;
+
+						game.run();
+						break;
+						}
+						
+					case 1:
+						{
+						window.close();
+						break;
+						}
+					}
+				}
+				break;
+			case sf::Event::Closed:
+				window.close();
+				break;
+
+			}
+
+		}
+		menu.draw(window);
+		window.display();
+	}
+	
+	
+
+}
